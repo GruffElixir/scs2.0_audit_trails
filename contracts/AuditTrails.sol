@@ -216,6 +216,71 @@ contract AuditTrail {
     
     return result;
     }
+    function getAllTransactions() public view returns (Record[] memory) {
+    // Create an array to hold all transaction records
+    uint256 transactionCount = chain.length - 1; // Exclude genesis block
+    Record[] memory allTransactions = new Record[](transactionCount);
+
+    // Iterate through the chain to collect all transactions
+    for (uint256 i = 1; i < chain.length; i++) {
+        allTransactions[i - 1] = chain[i].record; // Populate the array
+    }
+    
+    return allTransactions; // Return the array of all transactions
+    }
+    function getTransactionCountBySender(string memory sender) public view returns (uint256 count) {
+    count = 0; // Initialize count to zero
+
+    // Iterate through the chain to count transactions for the specified sender
+    for (uint256 i = 1; i < chain.length; i++) {
+        if (keccak256(abi.encodePacked(chain[i].record.sender)) == keccak256(abi.encodePacked(sender))) {
+            count++;
+            }
+        }
+    }
+    function getTransactionCountByReceiver(string memory receiver) public view returns (uint256 count) {
+    count = 0; // Initialize count to zero
+
+    // Iterate through the chain to count transactions for the specified receiver
+    for (uint256 i = 1; i < chain.length; i++) {
+        if (keccak256(abi.encodePacked(chain[i].record.receiver)) == keccak256(abi.encodePacked(receiver))) {
+            count++;
+            }
+        }
+    }
+    function getTransactionCountByPurpose(string memory purpose) public view returns (uint256 count) {
+    count = 0; // Initialize count to zero
+
+    // Iterate through the chain to count transactions with the specified purpose
+    for (uint256 i = 1; i < chain.length; i++) {
+        if (keccak256(abi.encodePacked(chain[i].record.purpose)) == keccak256(abi.encodePacked(purpose))) {
+            count++;
+            }
+        }
+    }
+    function getTransactionsByAmountRange(uint256 minAmount, uint256 maxAmount) public view returns (Record[] memory) {
+    // Create a dynamic array to hold matching records
+    Record[] memory matchingTransactions = new Record[](chain.length - 1); // Excluding the genesis block
+    uint256 count = 0;
+
+    // Iterate through the chain to find transactions within the specified amount range
+    for (uint256 i = 1; i < chain.length; i++) {
+        uint256 amount = chain[i].record.amount;
+        if (amount >= minAmount && amount <= maxAmount) {
+            matchingTransactions[count] = chain[i].record;
+            count++;
+        }
+    }
+
+    // Create a smaller array to return only the records that were found
+    Record[] memory result = new Record[](count);
+    for (uint256 j = 0; j < count; j++) {
+        result[j] = matchingTransactions[j];
+    }
+
+    return result;
+    }
+
 
 
 
