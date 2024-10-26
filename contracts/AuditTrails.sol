@@ -6,6 +6,7 @@ contract AuditTrail {
         string sender;
         string receiver;
         uint256 amount;
+        string purpose;  // Added purpose field
     }
 
     struct Block {
@@ -18,14 +19,14 @@ contract AuditTrail {
     }
 
     Block[] public chain;
-    uint256 public difficulty = 1; // Reduced to minimum for testing
+    uint256 public difficulty = 1;
 
     event BlockAdded(uint256 index, bytes32 blockHash, bytes32 prevHash);
 
     constructor() {
         bytes32 genesisHash = keccak256(abi.encodePacked("Genesis"));
         chain.push(Block({
-            record: Record("Genesis", "Genesis", 0),
+            record: Record("Genesis", "Genesis", 0, "Genesis Block"),
             creatorId: msg.sender,
             prevHash: bytes32(0),
             timestamp: block.timestamp,
@@ -38,32 +39,31 @@ contract AuditTrail {
         string memory sender,
         string memory receiver,
         uint256 amount,
+        string memory purpose,
         address creatorId,
         bytes32 prevHash,
         uint256 timestamp,
         uint256 nonce
     ) private pure returns (bytes32) {
-        return keccak256(abi.encodePacked(sender, receiver, amount, creatorId, prevHash, timestamp, nonce));
+        return keccak256(abi.encodePacked(sender, receiver, amount, purpose, creatorId, prevHash, timestamp, nonce));
     }
 
     function proofOfWork(bytes32 hash) private view returns (bool) {
-        // Simplified PoW - just check if the last byte is less than a target
         return uint8(uint256(hash) & 0xFF) < 256 - (difficulty * 16);
     }
 
-    function addBlock(string memory sender, string memory receiver, uint256 amount) public {
+    function addBlock(string memory sender, string memory receiver, uint256 amount, string memory purpose) public {
         Block memory prevBlock = chain[chain.length - 1];
         
         uint256 nonce = 0;
         bytes32 hash;
         uint256 timestamp = block.timestamp;
         
-        // Reduced max iterations
-        uint256 maxIterations = 100;
+        uint256 maxIterations = 1000;
         bool found = false;
         
         for (uint256 i = 0; i < maxIterations; i++) {
-            hash = calculateHash(sender, receiver, amount, msg.sender, prevBlock.blockHash, timestamp, nonce);
+            hash = calculateHash(sender, receiver, amount, purpose, msg.sender, prevBlock.blockHash, timestamp, nonce);
             if (proofOfWork(hash)) {
                 found = true;
                 break;
@@ -74,7 +74,7 @@ contract AuditTrail {
         require(found, "Failed to find valid nonce within gas limits");
 
         Block memory newBlock = Block({
-            record: Record(sender, receiver, amount),
+            record: Record(sender, receiver, amount, purpose),
             creatorId: msg.sender,
             prevHash: prevBlock.blockHash,
             timestamp: timestamp,
@@ -99,6 +99,7 @@ contract AuditTrail {
                 currentBlock.record.sender,
                 currentBlock.record.receiver,
                 currentBlock.record.amount,
+                currentBlock.record.purpose,
                 currentBlock.creatorId,
                 currentBlock.prevHash,
                 currentBlock.timestamp,
@@ -112,10 +113,26 @@ contract AuditTrail {
         return true;
     }
 
+    function calculateSummaries() public view returns (uint256 totalTransactions, uint256 totalVolume, uint256 avgTransactionValue) {
+        totalTransactions = chain.length - 1; // Subtract genesis block
+        for (uint256 i = 1; i < chain.length; i++) {
+            totalVolume += chain[i].record.amount;
+        }
+        if (totalTransactions > 0) {
+            avgTransactionValue = totalVolume / totalTransactions;
+        }
+    }
+
+    function setDifficulty(uint256 _difficulty) public {
+        require(_difficulty > 0, "Difficulty must be greater than zero");
+        difficulty = _difficulty;
+    }
+
     function getBlock(uint256 index) public view returns (
         string memory sender,
         string memory receiver,
         uint256 amount,
+        string memory purpose,
         bytes32 blockHash,
         bytes32 prevHash,
         uint256 timestamp
@@ -126,6 +143,7 @@ contract AuditTrail {
             blockData.record.sender,
             blockData.record.receiver,
             blockData.record.amount,
+            blockData.record.purpose,
             blockData.blockHash,
             blockData.prevHash,
             blockData.timestamp
