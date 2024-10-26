@@ -153,4 +153,55 @@ contract AuditTrail {
     function getChainLength() public view returns (uint256) {
         return chain.length;
     }
+    function searchTransactions(string memory sender, string memory receiver, string memory purpose) 
+    public view returns (Record[] memory) {
+    uint256 totalMatches = 0;
+
+    // First, count how many matches we have
+    for (uint256 i = 1; i < chain.length; i++) {
+        Record memory record = chain[i].record;
+        bool isMatch = true; // Changed variable name here
+
+        if (bytes(sender).length > 0 && keccak256(abi.encodePacked(record.sender)) != keccak256(abi.encodePacked(sender))) {
+            isMatch = false;
+        }
+        if (bytes(receiver).length > 0 && keccak256(abi.encodePacked(record.receiver)) != keccak256(abi.encodePacked(receiver))) {
+            isMatch = false;
+        }
+        if (bytes(purpose).length > 0 && keccak256(abi.encodePacked(record.purpose)) != keccak256(abi.encodePacked(purpose))) {
+            isMatch = false;
+        }
+
+        if (isMatch) {
+            totalMatches++;
+        }
+    }
+
+    // Create an array to store matched records
+    Record[] memory matches = new Record[](totalMatches);
+    uint256 index = 0;
+
+    // Second, populate the matched records
+    for (uint256 i = 1; i < chain.length; i++) {
+        Record memory record = chain[i].record;
+        bool isMatch = true; // Changed variable name here
+
+        if (bytes(sender).length > 0 && keccak256(abi.encodePacked(record.sender)) != keccak256(abi.encodePacked(sender))) {
+            isMatch = false;
+        }
+        if (bytes(receiver).length > 0 && keccak256(abi.encodePacked(record.receiver)) != keccak256(abi.encodePacked(receiver))) {
+            isMatch = false;
+        }
+        if (bytes(purpose).length > 0 && keccak256(abi.encodePacked(record.purpose)) != keccak256(abi.encodePacked(purpose))) {
+            isMatch = false;
+        }
+
+        if (isMatch) {
+            matches[index] = record;
+            index++;
+        }
+    }
+
+    return matches;
+    }
 }
