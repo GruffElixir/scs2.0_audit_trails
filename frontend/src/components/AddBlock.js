@@ -16,7 +16,7 @@ function AddBlock() {
 
 		try {
 			const contract = await connectContract();
-			console.log("lavda lehsun");
+			
 			// Note the await here
 			const tx = await contract.addBlock(
 				sender,
