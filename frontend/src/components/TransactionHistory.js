@@ -90,7 +90,7 @@ const TransactionHistory = () => {
                         <li key={index}>
                             <strong>Sender:</strong> {tx.sender}, 
                             <strong> Receiver:</strong> {tx.receiver}, 
-                            <strong> Amount:</strong> {tx.amount}, 
+                            <strong> Amount:</strong> {tx.amount?.toString()}, 
                             <strong> Purpose:</strong> {tx.purpose}
                         </li>
                     ))
