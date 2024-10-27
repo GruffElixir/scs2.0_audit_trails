@@ -5,6 +5,8 @@ import GetChainLength from "./components/GetChainLength";
 import GetAllTransactionHistory from "./components/GetAllTransactionHistory";
 import GetTransactionsByAmountRange from "./components/GetTransactionsByAmountRange";
 import TransactionHistory from './components/TransactionHistory';
+import './App.css';
+
 
 
 function App() {
