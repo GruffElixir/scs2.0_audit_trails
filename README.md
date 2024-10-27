@@ -53,12 +53,28 @@ npx hardhat node
 
 ## Deployment
 
+Localhost:
+
 ```bash
 #Deploy the Contract
 
 #In a new terminal, deploy the contract to this local blockchain network.
 
 npx hardhat run scripts/deploy.js --network localhost
+
+#You should see output in the console indicating the contract’s address. Note this address, as you will need it to connect the frontend.
+```
+
+On Polygon zkEVM Cardona Testnet:
+
+Replace "YOUR_WALLET_PRIVATE_KEY_HERE" with your metamask/wallet's private key in hardhat.config.js -> cardona
+
+```bash
+#Deploy the Contract
+
+#In a new terminal, deploy the contract to this local blockchain network.
+
+npx hardhat run scripts/deploy.js --network cardona
 
 #You should see output in the console indicating the contract’s address. Note this address, as you will need it to connect the frontend.
 ```
