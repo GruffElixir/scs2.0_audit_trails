@@ -1,8 +1,10 @@
+
+
 import { ethers } from "ethers";
 import AuditTrailABI from "./contracts/AuditTrails.sol/AuditTrail.json";
 
-const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
-const provider = new ethers.JsonRpcProvider("http://localhost:8545");
+const contractAddress = process.env.REACT_APP_CONTRACT_ADDRESS;
+const provider = new ethers.JsonRpcProvider(process.env.REACT_APP_RPC_URL);
 
 // Connect to the contract
 const connectContract = async () => {
@@ -32,5 +34,46 @@ const getReadOnlyContract = () => {
     );
 };
 
-export { getReadOnlyContract, provider };
+// Fetch transaction history by sender
+const getTransactionHistoryBySender = async (sender) => {
+    const contract = getReadOnlyContract();
+    try {
+        return await contract.getTransactionHistory(sender);
+    } catch (error) {
+        console.error("Error fetching transaction history by sender:", error);
+        throw error;
+    }
+};
+
+// Fetch transaction history by receiver
+const getTransactionHistoryByReceiver = async (receiver) => {
+    const contract = getReadOnlyContract();
+    try {
+        return await contract.getReceiverTransactionHistory(receiver);
+    } catch (error) {
+        console.error("Error fetching transaction history by receiver:", error);
+        throw error;
+    }
+};
+
+// Fetch transaction history by purpose
+const getTransactionHistoryByPurpose = async (purpose) => {
+    const contract = getReadOnlyContract();
+    try {
+        return await contract.getTransactionHistoryByPurpose(purpose);
+    } catch (error) {
+        console.error("Error fetching transaction history by purpose:", error);
+        throw error;
+    }
+};
+
+export {
+
+    getReadOnlyContract, provider,
+    getTransactionHistoryBySender,
+    getTransactionHistoryByReceiver,
+    getTransactionHistoryByPurpose,
+};
+
+// export { getReadOnlyContract, provider };
 export default connectContract;
