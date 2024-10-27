@@ -41,4 +41,22 @@ cd scs2.0_audit_trails
 
 # Install dependencies for both backend and frontend
 npm install
+
+#Compile the smart contract using Hardhat.
+
+npx hardhat compile
+
+#Deploy the smart contract to the local Hardhat network.
+
+npx hardhat node
+
+#This command will start a local blockchain instance and display a list of accounts with their private keys. Leave this terminal open, as it serves as your local blockchain.
+
+#Deploy the Contract
+
+#In a new terminal, deploy the contract to this local blockchain network.
+
+npx hardhat run scripts/deploy.js --network localhost
+
+#You should see output in the console indicating the contract’s address. Note this address, as you will need it to connect the frontend.
 ```
