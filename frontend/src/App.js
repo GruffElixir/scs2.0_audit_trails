@@ -4,10 +4,8 @@ import DisplayBlocks from "./components/DisplayBlocks";
 import GetChainLength from "./components/GetChainLength";
 import GetAllTransactionHistory from "./components/GetAllTransactionHistory";
 import GetTransactionsByAmountRange from "./components/GetTransactionsByAmountRange";
-import TransactionHistory from './components/TransactionHistory';
-import './App.css';
-
-
+import TransactionHistory from "./components/TransactionHistory";
+import "./App.css";
 
 function App() {
 	return (
@@ -17,9 +15,8 @@ function App() {
 			<GetAllTransactionHistory />
 			<GetTransactionsByAmountRange />
 			<TransactionHistory />
-			<DisplayBlocks />
 			<GetChainLength />
-			
+			<DisplayBlocks />
 		</div>
 	);
 }
