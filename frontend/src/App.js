@@ -10,7 +10,7 @@ import "./App.css";
 function App() {
 	return (
 		<div className="App">
-			<h1>Audit Trail DApp</h1>
+			<h1>TrustNet DApp</h1>
 			<AddBlock />
 			<GetAllTransactionHistory />
 			<GetTransactionsByAmountRange />
