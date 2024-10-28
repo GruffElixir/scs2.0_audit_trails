@@ -44,11 +44,7 @@ npm install --save ethers
 
 npx hardhat compile
 
-#Deploy the smart contract to the local Hardhat network.
 
-npx hardhat node
-
-#This command will start a local blockchain instance and display a list of accounts with their private keys. Leave this terminal open, as it serves as your local blockchain.
 ```
 
 ## Deployment
@@ -56,6 +52,13 @@ npx hardhat node
 Localhost deployment:
 
 ```bash
+
+#Deploy the smart contract to the local Hardhat network.
+
+npx hardhat node
+
+#This command will start a local blockchain instance and display a list of accounts with their private keys. Leave this terminal open, as it serves as your local blockchain.
+
 #Deploy the Contract
 
 #In a new terminal, deploy the contract to this local blockchain network.
