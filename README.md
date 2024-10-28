@@ -65,7 +65,7 @@ npx hardhat node
 
 npx hardhat run scripts/deploy.js --network localhost
 
-#You should see output in the console indicating the contract’s address. Note this address, as you will need it to connect the frontend.
+#You should see output in the console indicating the contract’s address.
 ```
 
 In case you want to deploy on Polygon zkEVM Cardona Testnet:
