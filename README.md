@@ -22,7 +22,7 @@ This project is a decentralized application (dApp) designed to provide immutable
 
 - [Node.js](https://nodejs.org/) (version 16+ recommended)
 - [Hardhat](https://hardhat.org/)
-- [Ethers.js]
+- Ethers.js
 - Local blockchain (using Hardhat Network)
 
 ## Installation
